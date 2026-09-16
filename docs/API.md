@@ -150,6 +150,45 @@ Role: `sales`, `admin`. Registered borrowers with **no loan**, plus funnel stage
   "converted": [ { "id": "...", "name": "Meera Patel", "loanCount": 1, "latestStatus": "DISBURSED" } ] }
 ```
 
+### `GET /dashboard/sanction/pending`
+Role: `sanction`, `admin`. All `APPLIED` loans with borrower details.
+
+```jsonc
+// 200
+{ "loans": [ { "id": "...", "amount": 200000, "tenureDays": 180, "simpleInterest": 11835.62,
+               "totalRepayment": 211835.62, "paidAmount": 0, "outstanding": 211835.62,
+               "status": "APPLIED", "appliedAt": "...",
+               "borrower": { "id": "...", "name": "Ravi Kumar", "email": "ravi@example.com",
+                             "monthlySalary": 42000, "employmentMode": "SALARIED" } } ] }
+```
+
+### `GET /dashboard/disbursement/pending`
+Role: `disbursement`, `admin`. All `SANCTIONED` loans with borrower details.
+
+```jsonc
+// 200
+{ "loans": [ { "id": "...", "amount": 200000, "status": "SANCTIONED", "sanctionedAt": "...",
+               "borrower": { "id": "...", "name": "Ravi Kumar" } } ] }
+```
+
+### `GET /dashboard/collection/pending`
+Role: `collection`, `admin`. All `DISBURSED` loans with borrower details and payment history.
+
+```jsonc
+// 200
+{ "loans": [ { "id": "...", "amount": 200000, "totalRepayment": 211835.62, "paidAmount": 50000,
+               "outstanding": 161835.62, "status": "DISBURSED", "disbursedAt": "...",
+               "borrower": { "id": "...", "name": "Ravi Kumar" },
+               "payments": [ { "id": "...", "utr": "HDFC1234", "amount": 50000, "date": "..." } ] } ] }
+```
+
+### `GET /dashboard/admin/loans`
+Role: `admin`. All loans with optional `?status=X` filter. Returns the same shape as the module-specific endpoints above.
+
+```jsonc
+// 200 — same shape as /dashboard/collection/pending with payments included
+```
+
 ### `GET /loans?status=APPLIED|SANCTIONED|DISBURSED|CLOSED|REJECTED`
 Role-scoped: `sanction` may query `APPLIED|REJECTED`; `disbursement` → `SANCTIONED`; `collection` → `DISBURSED|CLOSED`; `admin` → any. Borrowers use `/borrower/loans` instead. Embedded borrower summary on each loan.
 

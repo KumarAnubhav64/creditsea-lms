@@ -1,6 +1,8 @@
 import express from 'express';
 import type { Server } from 'http';
 import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import fs from 'fs';
 import pinoHttp from 'pino-http';
 import { env } from './config/env';
@@ -14,9 +16,29 @@ import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 
 const app = express();
 
+app.use(helmet());
+
 // Factor IV — the CORS surface is environment config, not code.
-app.use(cors({ origin: env.corsOrigins.length ? env.corsOrigins : true }));
-app.use(express.json());
+// In production, reject requests if no origins are configured.
+const corsOrigin = env.corsOrigins.length ? env.corsOrigins : (env.isProduction ? false : true);
+app.use(cors({ origin: corsOrigin }));
+app.use(express.json({ limit: '1mb' }));
+
+// Rate limiting on auth routes to prevent brute-force
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: 'Too many attempts, please try again later' },
+});
+const globalLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: 'Rate limit exceeded, please slow down' },
+});
 
 // Factor XI — request logging as a structured stdout stream.
 app.use(
@@ -33,10 +55,10 @@ app.get('/health', (_req, res) => {
 
 app.use('/uploads', express.static(env.uploadDir));
 
-app.use('/api/auth', authRoutes);
-app.use('/api/borrower', borrowerRoutes);
-app.use('/api/loans', loanRoutes);
-app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/auth', authLimiter, authRoutes);
+app.use('/api/borrower', globalLimiter, borrowerRoutes);
+app.use('/api/loans', globalLimiter, loanRoutes);
+app.use('/api/dashboard', globalLimiter, dashboardRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

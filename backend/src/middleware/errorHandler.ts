@@ -31,12 +31,14 @@ export function errorHandler(err: unknown, _req: Request, res: Response, _next: 
       message = e.message;
     } else if (e.name === 'ValidationError') {
       statusCode = 400;
-      message = Object.values((e as never as { errors: Record<string, { message: string }> }).errors)
+      const validationErr = err as Error & { errors: Record<string, { message: string }> };
+      message = Object.values(validationErr.errors)
         .map((v) => v.message)
         .join('; ');
     } else if ((err as MongoError).code === 11000) {
       statusCode = 409;
-      const field = Object.keys((err as never as { keyValue?: Record<string, unknown> }).keyValue ?? {})[0];
+      const mongoErr = err as MongoError & { keyValue?: Record<string, unknown> };
+      const field = Object.keys(mongoErr.keyValue ?? {})[0];
       message = field === 'utr' ? 'UTR already recorded' : `Duplicate value for unique field: ${field ?? 'unknown'}`;
     } else if (e.name === 'MulterError') {
       if (e.message === 'File too large') {

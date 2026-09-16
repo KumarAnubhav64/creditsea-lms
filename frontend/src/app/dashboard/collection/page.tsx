@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { api, ApiClientError } from '@/lib/api';
 import type { Loan } from '@/lib/types';
+import toast from 'react-hot-toast';
 import { StatusBadge } from '@/components/StatusBadge';
 import { PageHeader, EmptyState, LoadingRows, ErrorState } from '@/components/Page';
 import { Modal } from '@/components/Modal';
@@ -38,7 +39,7 @@ export default function CollectionPage() {
     try {
       await api(`/api/loans/${modalLoan.id}/payments`, { method: 'POST', body: { utr: utr.trim(), amount: Number(amount) } });
       setModalLoan(null); setUtr(''); setAmount(''); void fetchLoans();
-    } catch (err) { alert(err instanceof ApiClientError ? err.message : 'Failed'); }
+    } catch (err) { toast.error(err instanceof ApiClientError ? err.message : 'Failed'); }
     finally { setActing(false); }
   }
 

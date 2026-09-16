@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { api, ApiClientError } from '@/lib/api';
 import type { Loan } from '@/lib/types';
+import toast from 'react-hot-toast';
 import { StatusBadge } from '@/components/StatusBadge';
 import { PageHeader, EmptyState, LoadingRows, ErrorState } from '@/components/Page';
 import { Modal } from '@/components/Modal';
@@ -40,7 +41,7 @@ export default function SanctionPage() {
         body: { action: modal.action, ...(modal.action === 'REJECT' ? { reason } : {}) },
       });
       setModal(null); setReason(''); void fetchLoans();
-    } catch (err) { alert(err instanceof ApiClientError ? err.message : 'Failed'); }
+    } catch (err) { toast.error(err instanceof ApiClientError ? err.message : 'Failed'); }
     finally { setActing(false); }
   }
 

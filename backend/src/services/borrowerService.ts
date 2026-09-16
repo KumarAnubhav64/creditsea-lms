@@ -106,8 +106,9 @@ export const borrowerService = {
   async getStage(userId: string) {
     const user = await userRepository.findById(userId);
     if (!user) throw ApiError.notFound('User not found');
-    const json = user.toJSON() as any;
-    return { stage: deriveStage(json), hasLoanConfig: !!(json.loanConfig?.amount) };
+    const json = user.toJSON() as Record<string, unknown>;
+    const lc = json.loanConfig as Record<string, unknown> | undefined;
+    return { stage: deriveStage(json), hasLoanConfig: !!(lc?.amount) };
   },
 
   /** Step 4a — save loan config (principal + tenure) before applying. */

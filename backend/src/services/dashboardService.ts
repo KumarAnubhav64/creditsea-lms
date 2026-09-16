@@ -2,6 +2,7 @@ import { loanRepository } from '../repositories/loanRepository';
 import { userRepository } from '../repositories/userRepository';
 import { serializeLoans } from '../serializers/loanSerializer';
 import { paymentRepository } from '../repositories/paymentRepository';
+import { LOAN_STATUSES, type LoanStatus } from '../models/Loan';
 
 /**
  * ADR-011 — the funnel stage is DERIVED from the user document and their loans,
@@ -95,8 +96,9 @@ export const dashboardService = {
 
   /** Admin: all loans with optional status filter. */
   async allLoans(status?: string) {
-    const loans = status
-      ? await loanRepository.findByStatus(status as any)
+    const isValid = status && (LOAN_STATUSES as readonly string[]).includes(status);
+    const loans = isValid
+      ? await loanRepository.findByStatus(status as LoanStatus)
       : await loanRepository.findAllMinimal();
     const loanIds = loans.map((l) => l._id);
     const payments = await paymentRepository.findByLoanIds(loanIds);

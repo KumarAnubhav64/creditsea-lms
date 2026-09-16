@@ -98,7 +98,7 @@ async function seed(): Promise<void> {
       },
       { upsert: true }
     );
-    logger.info(`[seed] role account ready: ${acc.email} / ${PASSWORD} (${acc.role})`);
+    logger.info(`[seed] role account ready: ${acc.email} (${acc.role})`);
   }
 
   // --- Demo borrowers + loans (rebuild from scratch for idempotence) ---
