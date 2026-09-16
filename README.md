@@ -74,7 +74,12 @@ Open **http://localhost:3000** and sign in with any account below.
 
 ### Demo Video
 
-A 3-minute video walkthrough of the complete flow is available:
+3-minute walkthrough of the complete borrower-to-closure flow:
+
+<video src="demo-video.mp4" controls width="100%">
+  Your browser does not support the video tag.
+  <a href="demo-video.mp4">Download the video</a>
+</video>
 
 | Step | Description |
 |------|-------------|
@@ -88,7 +93,7 @@ A 3-minute video walkthrough of the complete flow is available:
 | 8 | Collection dashboard |
 | 9 | Admin overview |
 
-> See `demo/` folder for screenshots and `demo-video.mp4` for the full recording.
+> See `demo/` folder for individual screenshots.
 
 ---
 
