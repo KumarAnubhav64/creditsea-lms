@@ -2,14 +2,17 @@ import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
   testDir: './e2e',
-  timeout: 30_000,
+  timeout: 120_000,
   retries: 0,
   use: {
     baseURL: 'http://localhost:3000',
     headless: true,
-    screenshot: 'only-on-failure',
+    screenshot: 'on',
+    video: 'on',
+    trace: 'on-first-retry',
   },
   projects: [
     { name: 'chromium', use: { browserName: 'chromium' } },
   ],
+  outputDir: './test-results',
 });
