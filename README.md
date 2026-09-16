@@ -76,10 +76,9 @@ Open **http://localhost:3000** and sign in with any account below.
 
 3-minute walkthrough of the complete borrower-to-closure flow:
 
-<video src="demo-video.mp4" controls width="100%">
-  Your browser does not support the video tag.
-  <a href="demo-video.mp4">Download the video</a>
-</video>
+[![Demo Video](demo/thumbnail.png)](demo-video.mp4)
+
+> Click the image above to play. Or [download the video](demo-video.mp4) directly.
 
 | Step | Description |
 |------|-------------|
@@ -92,8 +91,6 @@ Open **http://localhost:3000** and sign in with any account below.
 | 7 | Disbursement with UTR |
 | 8 | Collection dashboard |
 | 9 | Admin overview |
-
-> See `demo/` folder for individual screenshots.
 
 ---
 
