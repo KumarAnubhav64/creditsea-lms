@@ -1,0 +1,21 @@
+services:
+  # Single-node replica set — required for multi-document transactions
+  # (payment insert + loan auto-close, ADR-009/010). The healthcheck
+  # auto-initiates the replica set on first boot.
+  mongo:
+    image: mongo:7
+    container_name: creditsea-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - creditsea-mongo-data:/data/db
+    command: ["--replSet", "rs0"]
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "try { rs.status().ok } catch (e) { rs.initiate({_id:'rs0',members:[{_id:0,host:'localhost:27017'}]}).ok }"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 5s
+
+volumes:
+  creditsea-mongo-data:

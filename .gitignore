@@ -1,0 +1,32 @@
+# dependencies
+node_modules/
+.pnp.*
+
+# build output
+dist/
+.next/
+out/
+
+# env files
+.env
+.env.local
+.env.*.local
+
+# uploads (user-generated)
+uploads/
+
+# test results
+test-results/
+playwright-report/
+
+# logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
