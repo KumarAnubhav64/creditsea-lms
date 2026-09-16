@@ -76,9 +76,9 @@ Open **http://localhost:3000** and sign in with any account below.
 
 3-minute walkthrough of the complete borrower-to-closure flow:
 
-[![Demo Video](demo/thumbnail.png)](demo-video.mp4)
+![Demo](demo/demo.gif)
 
-> Click the image above to play. Or [download the video](demo-video.mp4) directly.
+> [Download full video](demo-video.mp4) (MP4, higher quality)
 
 | Step | Description |
 |------|-------------|
