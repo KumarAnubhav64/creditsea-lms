@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: creditsea-backend
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: node dist/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: false
+      - key: CORS_ORIGIN
+        sync: false
+      - key: PORT
+        value: 5000
+      - key: LOG_LEVEL
+        value: info
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: MAX_FILE_SIZE_MB
+        value: 5
